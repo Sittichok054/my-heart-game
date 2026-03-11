@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องตรวจวัดความน่ารักของใบไผ่</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Itim', cursive;
+            background: #fff5f8;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            overflow: hidden;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #ffd1dc;
+            border-radius: 20px;
+            height: 30px;
+            overflow: hidden;
+            border: 2px solid #ff4d6d;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff4d6d, #ff8fa3);
+            transition: width 0.1s;
+        }
+        .floating-heart {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            animation: moveUp 3s linear forwards;
+        }
+        @keyframes moveUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="bg-white p-8 rounded-3xl shadow-2xl border-4 border-pink-200 text-center max-w-sm w-full mx-4">
+        <div id="step-1">
+            <div class="text-6xl mb-4">🔍</div>
+            <h1 class="text-3xl font-bold text-pink-600 mb-6">ระบบตรวจจับความน่ารักของใบไผ่</h1>
+            <p class="text-gray-600 mb-8">กรุณากดปุ่มด้านล่างเพื่อเริ่มการสแกนใบหน้า (ผ่านหน้าจอ)</p>
+            <button id="scan-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all active:scale-95 text-xl w-full">
+                เริ่มสแกนเลย!
+            </button>
+        </div>
+
+        <div id="step-2" class="hidden">
+            <div class="text-6xl mb-4 animate-pulse">📡</div>
+            <h1 class="text-2xl font-bold text-pink-500 mb-6">กำลังวิเคราะห์ความน่ารัก...</h1>
+            <div class="progress-container mb-4">
+                <div id="bar" class="progress-bar"></div>
+            </div>
+            <p id="percent" class="text-xl font-bold text-pink-600">0%</p>
+        </div>
+
+        <div id="step-3" class="hidden">
+            <div class="text-7xl mb-4">🚨</div>
+            <h1 class="text-3xl font-bold text-red-500 mb-2">อันตราย!</h1>
+            <p class="text-xl text-gray-700 mb-6">ตรวจพบความน่ารักระดับเกินขีดจำกัด <br><span class="text-red-500 font-bold">(999,999%)</span></p>
+            <div class="bg-red-50 p-4 rounded-xl border-2 border-dashed border-red-300 mb-6">
+                <p class="text-red-600 font-bold">ความผิด: น่ารักเกินไปจนทำให้เค้าใจสั่น</p>
+            </div>
+            <p class="text-gray-600 mb-6">บทลงโทษ: ต้องให้เค้ากอดนะค้าบ!</p>
+            <button id="accept-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-full shadow-md text-xl w-full transition-all">
+                ยอมรับโทษแต่โดยดี 🥰
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const scanBtn = document.getElementById('scan-btn');
+        const acceptBtn = document.getElementById('accept-btn');
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const step3 = document.getElementById('step-3');
+        const bar = document.getElementById('bar');
+        const percentText = document.getElementById('percent');
+
+        scanBtn.addEventListener('click', () => {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        step2.classList.add('hidden');
+                        step3.classList.remove('hidden');
+                        startHeartRain();
+                    }, 500);
+                } else {
+                    width += Math.random() * 5;
+                    if (width > 100) width = 100;
+                    bar.style.width = width + '%';
+                    percentText.innerText = Math.floor(width) + '%';
+                }
+            }, 100);
+        });
+
+        acceptBtn.addEventListener('click', () => {
+            acceptBtn.innerText = "ลงโทษเรียบร้อยแล้ว! เจอกันนะ ❤️";
+            acceptBtn.disabled = true;
+            acceptBtn.classList.replace('bg-red-500', 'bg-green-500');
+        });
+
+        function startHeartRain() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerText = ['❤️', '💖', '💝', '✨'][Math.floor(Math.random() * 4)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '100vh';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 3000);
+            }, 200);
+        }
+    </script>
+</body>
+</html>
